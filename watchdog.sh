@@ -53,11 +53,15 @@ else
   else
     strikes=1
   fi
-  if [ "$strikes" -ge "$MAX_STRIKES" ] && [ "$prev_base" != "$DOWN" ]; then
-    send_telegram "<b>⚠️🔥 ¡El SERVIDOR se ha caído!</b>
+  if [ "$strikes" -ge "$MAX_STRIKES" ]; then
+    if [ "$prev" != "$DOWN" ]; then
+      send_telegram "<b>⚠️🔥 ¡El SERVIDOR se ha caído!</b>
 💥 <b>${URL}</b> sin respuesta
 🕐 Detectado a las <b>$(now_utc)</b>
 🛑 ${MAX_STRIKES} comprobaciones fallidas consecutivas"
+    else
+      echo "Ya notificado de la caída (sin reaviso)"
+    fi
     echo "$DOWN" > "$STATE_FILE"
   else
     echo "Fallos consecutivos: ${strikes} (aviso a partir de ${MAX_STRIKES})"
