@@ -48,7 +48,11 @@ if check_server; then
   fi
   echo "$UP" > "$STATE_FILE"
 else
-  strikes=$(( prev_base == DOWN ? prev_strikes + 1 : 1 ))
+  if [ "$prev_base" = "$DOWN" ]; then
+    strikes=$((prev_strikes + 1))
+  else
+    strikes=1
+  fi
   if [ "$strikes" -ge "$MAX_STRIKES" ] && [ "$prev_base" != "$DOWN" ]; then
     send_telegram "<b>⚠️🔥 ¡El SERVIDOR se ha caído!</b>
 💥 <b>${URL}</b> sin respuesta
